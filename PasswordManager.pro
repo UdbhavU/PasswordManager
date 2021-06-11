@@ -9,19 +9,24 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dbmanager.cpp \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    makeentrydialog.cpp \
     registerdialog.cpp
 
 HEADERS += \
+    dbmanager.h \
     logindialog.h \
     mainwindow.h \
+    makeentrydialog.h \
     registerdialog.h
 
 FORMS += \
     logindialog.ui \
     mainwindow.ui \
+    makeentrydialog.ui \
     registerdialog.ui
 
 # Default rules for deployment.

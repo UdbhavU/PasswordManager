@@ -32,7 +32,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>GroupBox</string>
+        <string>Register</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
