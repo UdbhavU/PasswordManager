@@ -1,8 +1,8 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
 
-#include <QtSql/QSqlDatabase>
-
+#include <QSqlDatabase>
+#include <QString>
 
 
 class DbManager
@@ -13,7 +13,7 @@ public:
 
 
 private:
-    QSqlDatabase db;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 
 };
 

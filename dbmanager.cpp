@@ -3,28 +3,19 @@
 
 #include <QFile>
 #include <QMessageBox>
-#include <QtSql/QSqlQuery>
-
+#include <QSqlQuery>
+#include <QVariant>
 DbManager::DbManager(const QString& path)
 {
-    db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(path);
-
 }
 
 int DbManager::createNewUser(const int& id, const QString& uname, const QString& pass)
 {
- int qstat = 0;
- QSqlQuery query(db);
- QString createQ = "CREATE TABLE user(uid integer primary key,uname text,password text);";
- qstat = query.exec(createQ);
- if(qstat){
+    QSqlQuery query(db);
+    int qstat = 0;
+    if(!qstat){
 
-     query.prepare("INSERT into user(:uid,:uname,:password)");
-     query.bindValue(":uid",id);
-     query.bindValue(":uname",uname);
-     query.bindValue(":password",pass);
-     qstat = query.exec();
      if(!qstat){
          QMessageBox mg;
          mg.setText("Failed to create new user");
@@ -32,6 +23,6 @@ int DbManager::createNewUser(const int& id, const QString& uname, const QString&
          mg.exec();
      }
  }
- query.finish();
+// query.finish();
  return qstat;
 }
