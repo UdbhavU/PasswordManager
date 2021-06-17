@@ -13,14 +13,17 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    void setSession(int id);
+    void setSession(QString &uname, QString &key);
 
     ~MainWindow();
 private slots:
     void on_actionExit_triggered();
 
+    void on_actionExport_triggered();
+
 private:
-    int sessionID = -1;
+    QString userName,key;
+    int sessionId = -1;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

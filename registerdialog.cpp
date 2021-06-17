@@ -35,9 +35,9 @@ void registerDialog::on_pushButton_2_clicked()
         mb.exec();
     }
     else{
-        QString hashpass = QString(QCryptographicHash::hash(pass,QCryptographicHash::RealSha3_512));
+        QString hashpass =QString(QCryptographicHash::hash(pass,QCryptographicHash::RealSha3_512));
 
-        DbManager db(uname);
+        DbManager db(QString(uname+".db"));
         if(db.createNewUser(1,uname,hashpass)){
             close();
         }

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/prefix1" lang="buttons">
+        <file>import.png</file>
+        <file>plus.png</file>
+        <file>export.png</file>
+        <file>user-shape.png</file>
+        <file>exit.png</file>
+    </qresource>
+</RCC>
