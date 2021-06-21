@@ -6,38 +6,39 @@
 #include <QCryptographicHash>
 #include <QMessageBox>
 
-loginDialog::loginDialog(QWidget *parent,QString *uname, QString *pass) :
+loginDialog::loginDialog(QWidget *parent,QString *pass) :
     QDialog(parent),
     ui(new Ui::loginDialog)
 {
-    username = uname;
+
     key = pass;
 
 
     ui->setupUi(this);
+    this->setWindowTitle("Login");
     ui->password->setEchoMode(QLineEdit::Password);
 }
 
-int loginDialog::getLoginId()
+int loginDialog::getLoginStatus()
 {
-    return loginId;
+    return loginStatus;
 }
 
 int loginDialog::login()
 {
 
-    *username = ui->uname->text();
+
     QByteArray pass = ui->password->text().toUtf8();
-    DbManager db(QString(*username+".db"));
-    *key = QString(QCryptographicHash::hash(pass,QCryptographicHash::Sha3_512));
-    loginId = db.validateUser(*username,*key);
-    if(loginId == -1){
+    DbManager db;
+    *key = QString(QCryptographicHash::hash(pass,QCryptographicHash::RealSha3_512));
+    loginStatus = db.validate(*key);
+    if(loginStatus == 0){
         QMessageBox mb;
         mb.setWindowTitle("ERROR");
         mb.setText("Failed to log in");
         mb.exec();
     }
-    return loginId;
+    return loginStatus;
 }
 
 loginDialog::~loginDialog()
@@ -64,11 +65,4 @@ void loginDialog::on_pushButton_2_clicked()
 
 
 
-void loginDialog::on_commandLinkButton_clicked()
-{
-    registerDialog rd;
-    rd.setModal(true);
-    rd.exec();
-
-}
 

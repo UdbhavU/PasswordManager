@@ -14,20 +14,21 @@ class loginDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit loginDialog(QWidget *parent = nullptr, QString *uname=0, QString *pass=0);
-    int getLoginId();
+    explicit loginDialog(QWidget *parent = nullptr,QString *pass=0);
+
     int login();
     ~loginDialog();
 
+    int getLoginStatus();
 private slots:
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
-    void on_commandLinkButton_clicked();
+
 
 private:
-    QString *username,*key;
-    int loginId = -1;
+    QString *key;
+    int loginStatus = -1;
     Ui::loginDialog *ui;
 };
 

@@ -1,7 +1,7 @@
 #include "logindialog.h"
 #include "mainwindow.h"
+#include "registerdialog.h"
 #include "ui_mainwindow.h"
-
 #include <QFileDialog>
 #include <QLabel>
 
@@ -10,35 +10,48 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    while(sessionId==-1){
-        loginDialog ld(this,&userName,&key);
-        ld.setModal(true);
-        ld.exec();
-        sessionId = ld.getLoginId();
+    this->setWindowTitle("Password Manager");
+
+    //this file is where all the accounts will be stored; this is encrypted
+    QFile dbFile("passList.db");
+
+   //checks if the file with accounts exists or not; if it exists then the user has registered with master password else prompt to register new account
+    if(!dbFile.exists()){
+        //creating a instance of register dialog and prompting it as a modal for user to register new user
+        registerDialog rd;
+        rd.setModal(true);
+        rd.exec();
+    }
+    else
+    {
+        //the below loop will persist the login window till the the correct password is entered; exit can be done only through the close button in the dialog
+        while(sessionId !=1){
+
+            loginDialog ld(this,&key);
+            ld.setModal(true);
+            ld.exec();
+            sessionId = ld.getLoginStatus();
+
+        }
     }
     QLabel *user = new QLabel;
-    user->setText(userName);
+    if(sessionId == 1) user->setText("Logged");
     statusBar()->addPermanentWidget(user);
 }
 
-void MainWindow::setSession(QString& uname,QString& key)
-{
-
-
-}
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-
+//the exit button in the toolbar
 void MainWindow::on_actionExit_triggered()
 {
     exit(EXIT_SUCCESS);
 }
 
-
+//the export button on the toolbar
 void MainWindow::on_actionExport_triggered()
 {
     QString fname = QFileDialog::getSaveFileName();

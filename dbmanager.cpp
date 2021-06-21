@@ -7,55 +7,75 @@
 #include <QVariant>
 #include <QDebug>
 #include <QSqlError>
-DbManager::DbManager(const QString& path)
+DbManager::DbManager()
 {
-    this->path = path;
 
-}
-
-int DbManager::createNewUser(const int& id, const QString& uname, const QString& pass)
-{
-    QFile dbFile(path);
-    qDebug()<<QSqlDatabase::drivers();
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","PMGR");
-    if(!dbFile.exists()){
-
-
-        db.setDatabaseName("_"+path);
-        db.setUserName(uname);
-        db.setPassword(pass);
-        if(db.open()){
-            db.exec("CREATE TABLE passList(website TEXT,username TEXT,password TEXT)");
-            db.commit();
-            db.close();
-            return 1;
-
-
-        }
-
-}
-
-    return 0;
-}
-
-int DbManager::validateUser(const QString &uname, const QString &hashPass)
-{
-    QSqlDatabase db;
     if(QSqlDatabase::contains("PMGR")){
         db = QSqlDatabase::database("PMGR");
     }else{
-        db = QSqlDatabase::addDatabase("QSQLITE","PMGR");
-    }
-    db.setUserName(uname);
-    db.setPassword(hashPass);
-    if(db.open()){
-        qDebug()<<"opened";
+        db = QSqlDatabase::addDatabase("QSQLCIPHER","PMGR");
     }
 
-    return 1;
+}
+
+int DbManager::createMaster(const QString& pass)
+{
+    QFile dbFile("passList.db");
+    qDebug()<<QSqlDatabase::drivers();
+
+    if(!dbFile.exists()){
+        db.setDatabaseName("passList.db");
+        if(!db.open())
+
+
+            QMessageBox::critical(0,"ERROR","Failed to open passList.db");
+
+        else{
+            QSqlQuery *qry = new QSqlQuery(db);
+            qry->exec("PRAGMA key='"+pass+"';"); // this encrypts the database with user specified password
+            qry->exec("CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
+                     "website TEXT, username varchar(30), password TEXT, comment varchar(50));");
+
+            db.close();
+
+            return 1;
+        }
+
+}
+//}
+
+//    return 0;
+}
+
+int DbManager::validate(const QString &hashPass)
+{
+    QFile dbFile("passList.db");
+    qDebug()<<QSqlDatabase::drivers();
+
+    if(dbFile.exists()){
+    db.setDatabaseName("passList.db");
+    if(db.open()){
+        qDebug()<<"ioio";
+            QSqlQuery *qry = new QSqlQuery(db);
+            qry->exec("PRAGMA key='"+hashPass+"';");
+            qry->exec("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='accounts';");
+            qry->first();
+            if(qry->value(0).toInt()==1){
+                qDebug()<<"Logged in";
+                db.close();
+                return 1;
+            }else{
+            QMessageBox::warning(0,"ERROR","Wrong Password");
+    }}
+}else{
+        QMessageBox::warning(0,"ERROR","Register First");
+
+}
+return 0;
 }
 
 DbManager::~DbManager()
 {
-
+    db.removeDatabase("PMGR");
+    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
 }

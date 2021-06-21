@@ -8,13 +8,15 @@
 class DbManager
 {
 public:
-    DbManager(const QString& path);
-    int createNewUser(const int &id, const QString &uname, const QString &pass);
-    int validateUser(const QString& uname, const QString& hashPass);
+    DbManager();
+
     ~DbManager();
 
+    int createMaster(const QString &pass);
+    int validate(const QString &hashPass);
 private:
     QString path;
+    QSqlDatabase db;
     };
 
 #endif // DBMANAGER_H

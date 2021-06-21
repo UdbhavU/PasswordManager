@@ -26,7 +26,7 @@ void registerDialog::on_pushButton_2_clicked()
 //    makeEntryDialog me;
 //    me.setModal(true);
 //    me.exec();
-    QString uname = ui->uname->text();
+
     QByteArray pass = ui->password->text().toUtf8();
     QByteArray rPass = ui->rPassword->text().toUtf8();
     if(pass != rPass){
@@ -37,8 +37,9 @@ void registerDialog::on_pushButton_2_clicked()
     else{
         QString hashpass =QString(QCryptographicHash::hash(pass,QCryptographicHash::RealSha3_512));
 
-        DbManager db(QString(uname+".db"));
-        if(db.createNewUser(1,uname,hashpass)){
+        DbManager *db = new DbManager();
+        if(db->createMaster(hashpass)){
+            delete db;
             close();
         }
 
