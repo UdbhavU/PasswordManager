@@ -13,6 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void fillTable();
 
 
     ~MainWindow();
@@ -20,6 +21,8 @@ private slots:
     void on_actionExit_triggered();
 
     void on_actionExport_triggered();
+
+    void on_actionMake_new_entry_triggered();
 
 private:
     QString key;

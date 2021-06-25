@@ -28,9 +28,14 @@
            <x>0</x>
            <y>0</y>
            <width>778</width>
-           <height>495</height>
+           <height>489</height>
           </rect>
          </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QTableView" name="tblView"/>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>

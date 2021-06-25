@@ -1,6 +1,5 @@
 #include "dbmanager.h"
 #include "registerdialog.h"
-
 #include <QFile>
 #include <QMessageBox>
 #include <QSqlQuery>
@@ -44,7 +43,7 @@ int DbManager::createMaster(const QString& pass)
 }
 //}
 
-//    return 0;
+    return 0;
 }
 
 int DbManager::validate(const QString &hashPass)
@@ -71,11 +70,70 @@ int DbManager::validate(const QString &hashPass)
         QMessageBox::warning(0,"ERROR","Register First");
 
 }
-return 0;
+    return 0;
 }
 
+QSqlQueryModel* DbManager::getModel(const QString& key)
+{
+    db.setDatabaseName("passList.db");
+    if(db.open()){
+
+
+    QSqlQuery *qry = new QSqlQuery(db);
+    qry->exec("pragma key='"+key+"';");
+    qry->prepare("select website,username,password,comment from accounts");
+    QSqlQueryModel *model = new QSqlQueryModel();
+
+    if(qry->exec()) {
+        model->setQuery(*qry);
+        return model;
+
+
+    } else {
+        qDebug() << qry->lastError().text();
+        QMessageBox::critical(0,"No Records Found",
+                              "There are no records in the database.\n"
+                                 "Please save an account into the manager "
+                                 "before loading the accounts.",
+                              QMessageBox::Ok);
+        return 0;
+    }
+
+    return model;
+
+    }
+}
+
+int DbManager::makeAnEntry(QString& website, QString& uname, QString& password,QString& comment,QString& key)
+{
+    db.setDatabaseName("passList.db");
+    if(db.open()){
+
+    QSqlQuery *qry = new QSqlQuery(db);
+    qry->exec("pragma key='"+key+"';");
+    qry->prepare("insert into accounts (website,username,password,comment)"
+                " values('"+website+"','"+uname+"','"+password+"','"+comment+"');");
+
+
+    if(qry->exec())
+    {
+        QMessageBox::information(0,"Save","saved entry to passList.db");
+        db.commit();
+        return 1;
+
+    }
+    else {
+        QMessageBox::critical(0,"Save Failed","Duplicate data entered");
+        qDebug() << qry->lastError().text();
+    }
+}
+else{
+QMessageBox::warning(0,"ERROR","passList.db not found.\nRegister First");
+}
+}
 DbManager::~DbManager()
 {
+    db.close();
     db.removeDatabase("PMGR");
     QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
 }

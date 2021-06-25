@@ -1,9 +1,12 @@
+#include "dbmanager.h"
 #include "logindialog.h"
 #include "mainwindow.h"
 #include "registerdialog.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QLabel>
+#include <QTableView>
+#include "makeentrydialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,9 +37,22 @@ MainWindow::MainWindow(QWidget *parent)
 
         }
     }
-    QLabel *user = new QLabel;
-    if(sessionId == 1) user->setText("Logged");
-    statusBar()->addPermanentWidget(user);
+    QLabel *status = new QLabel;
+    if(sessionId == 1) status->setText("Logged");
+    statusBar()->addPermanentWidget(status);
+    //fill the table with the passList content
+    fillTable();
+
+}
+
+void MainWindow::fillTable()
+{
+    DbManager db;
+    auto model = db.getModel(key);
+    ui->tblView->setModel(model);
+
+
+
 }
 
 
@@ -60,5 +76,14 @@ void MainWindow::on_actionExport_triggered()
         statusBar()->showMessage(fname+"|opened",5000);
     file.close();
 
+}
+
+
+void MainWindow::on_actionMake_new_entry_triggered()
+{
+    makeEntryDialog ob(this,key);
+    ob.setModal(true);
+    ob.exec();
+    fillTable();
 }
 
