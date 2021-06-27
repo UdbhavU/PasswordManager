@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QTableView>
+#include <QTextStream>
 #include "makeentrydialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -70,11 +71,24 @@ void MainWindow::on_actionExit_triggered()
 //the export button on the toolbar
 void MainWindow::on_actionExport_triggered()
 {
+    //get the name of the csv file you want to dump the data to
     QString fname = QFileDialog::getSaveFileName();
     QFile file(fname);
-    if(file.open(QFile::Append | QFile::Text))
-        statusBar()->showMessage(fname+"|opened",5000);
+    //verify if the file is successfulled opened or not
+    if(file.open(QFile::Append | QFile::Text)){
+
+        QTextStream fstr(&file);
+        DbManager db;
+        //method used for dumping the data to a text stream
+        if(db.listExport(fstr,key)){
+            statusBar()->showMessage("Dumped data to "+fname,5000);
+        }
+
+        fstr.flush();
+
+
     file.close();
+    }
 
 }
 

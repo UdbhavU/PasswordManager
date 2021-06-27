@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include <QSqlQueryModel>
 #include <QString>
+#include <QTextStream>
 
 
 class DbManager
@@ -17,6 +18,7 @@ public:
     int validate(const QString &hashPass);
     QSqlQueryModel *getModel(const QString& key);
     int makeAnEntry(QString &website, QString &uname, QString &password, QString &comment, QString &key);
+    int listExport(QTextStream& stream, QString &key);
 private:
     QString path;
     QSqlDatabase db;
