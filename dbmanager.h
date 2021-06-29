@@ -19,6 +19,7 @@ public:
     QSqlQueryModel *getModel(const QString& key);
     int makeAnEntry(QString &website, QString &uname, QString &password, QString &comment, QString &key);
     int listExport(QTextStream& stream, QString &key);
+    int listImport(QString &website, QString &uname, QString &password, QString &comment, QString &key);
 private:
     QString path;
     QSqlDatabase db;

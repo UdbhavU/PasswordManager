@@ -101,3 +101,32 @@ void MainWindow::on_actionMake_new_entry_triggered()
     fillTable();
 }
 
+
+void MainWindow::on_actionImport_triggered()
+{
+    QString fname = QFileDialog::getSaveFileName();
+    QFile file(fname);
+    QString website ;
+    QString pass;
+    QString username;
+    QString comment;
+    DbManager db;
+    //verify if the file is successfulled opened or not
+    if(file.open(QFile::ReadOnly | QFile::Text)){
+
+           while (!file.atEnd()) {
+
+               QByteArray line = file.readLine();
+
+               website = line.split(',').at(0);
+               username = line.split(',').at(1);
+               pass = line.split(',').at(2);
+               comment = line.split(',').at(3);
+               db.listImport(website,username,pass,comment,key);
+               qDebug()<<website<<username<<pass<<comment;
+
+           }
+    }
+
+}
+

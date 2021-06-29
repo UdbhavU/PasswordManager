@@ -24,6 +24,8 @@ private slots:
 
     void on_actionMake_new_entry_triggered();
 
+    void on_actionImport_triggered();
+
 private:
     QString key;
     int sessionId = -1;

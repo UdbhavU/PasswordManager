@@ -31,7 +31,7 @@ int DbManager::createMaster(const QString& pass)
 
         else{
             QSqlQuery *qry = new QSqlQuery(db);
-            qry->exec("PRAGMA key='"+pass+"';"); // this encrypts the database with user specified password
+            qry->exec(" PRAGMA key='"+pass+"';"); // this encrypts the database with user specified password
             qry->exec("CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
                      "website TEXT, username varchar(30), password TEXT, comment varchar(50));");
 
@@ -111,7 +111,7 @@ int DbManager::makeAnEntry(QString& website, QString& uname, QString& password,Q
     if(db.open()){
 
     QSqlQuery *qry = new QSqlQuery(db);
-    qry->exec("pragma key='"+key+"';");
+   qry->exec("pragma key='"+key+"';");
     qry->prepare("insert into accounts (website,username,password,comment)"
                 " values('"+website+"','"+uname+"','"+password+"','"+comment+"');");
 
@@ -174,6 +174,16 @@ int DbManager::listExport(QTextStream &stream,QString& key)
                               "Try registering first",
                               QMessageBox::Ok);
         return 0;
+    }
+
+}
+
+int DbManager::listImport(QString &website, QString &uname, QString &password, QString &comment, QString &key)
+{
+    QFile dbFile("passList.db");
+    if(dbFile.exists())
+    {
+        makeAnEntry(website,uname,password,comment,key);
     }
 
 }
