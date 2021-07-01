@@ -14,7 +14,7 @@ class viewEntryDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit viewEntryDialog(QWidget *parent = nullptr, QString website="", QString uname="", QString password="", QString comment="",QString keyX="");
+    explicit viewEntryDialog(QWidget *parent = nullptr, int id=-1,QString website="", QString uname="", QString password="", QString comment="",QString keyX="");
     ~viewEntryDialog();
 
 private slots:

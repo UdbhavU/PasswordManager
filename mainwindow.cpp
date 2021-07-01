@@ -105,7 +105,7 @@ void MainWindow::on_actionMake_new_entry_triggered()
 
 void MainWindow::on_actionImport_triggered()
 {
-    QString fname = QFileDialog::getSaveFileName();
+    QString fname = QFileDialog::getOpenFileName();
     QFile file(fname);
     QString website ;
     QString pass;
@@ -124,6 +124,7 @@ void MainWindow::on_actionImport_triggered()
                pass = line.split(',').at(2);
                comment = line.split(',').at(3);
                db.listImport(website,username,pass,comment,key);
+               statusBar()->showMessage("Imported successfully", 5000);
 
 
            }
@@ -136,12 +137,14 @@ void MainWindow::on_tblView_clicked(const QModelIndex &index)
 {
     QString val = ui->tblView->model()->index(index.row(),0,QModelIndex()).data().toString();// get the website
     QString uname,password,comment;
+    int id;
     DbManager db;
-    db.getEntryDetail(val,&uname,&password,&comment,key);
-    qDebug()<<comment;
-    viewEntryDialog vd(this,val,uname,password,comment,key);
+    db.getEntryDetail(val,&uname,&password,&comment,&id,key);
+    qDebug()<<key;
+    viewEntryDialog vd(this,id,val,uname,password,comment,key);
     vd.setModal(true);
     vd.exec();
+    fillTable();
     qDebug()<<val;
 
 }

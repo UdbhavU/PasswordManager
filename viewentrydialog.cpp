@@ -5,14 +5,14 @@
 #include <QClipboard>
 #include <QThread>
 
-viewEntryDialog::viewEntryDialog(QWidget *parent, QString website, QString uname, QString password, QString comment, QString keyX) :
+viewEntryDialog::viewEntryDialog(QWidget *parent, int id, QString website, QString uname, QString password, QString comment, QString keyX) :
     QDialog(parent),
     ui(new Ui::viewEntryDialog)
 {
     key = keyX;
     Pass = password;
     this->uname = uname;
-    ed = new editDialog(this, website, uname, password, comment);
+    ed = new editDialog(this,id, website, uname, password, comment,key);
     ui->setupUi(this);
     ui->website->setText(website);
     ui->uname->setText(uname);

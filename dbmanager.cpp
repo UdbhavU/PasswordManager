@@ -81,11 +81,12 @@ QSqlQueryModel* DbManager::getModel(const QString& key)
 
     QSqlQuery *qry = new QSqlQuery(db);
     qry->exec("pragma key='"+key+"';");
-    qry->prepare("select website,username,password,comment from accounts");
+    qry->prepare("select website,username,\"**********\",comment from accounts");
     QSqlQueryModel *model = new QSqlQueryModel();
 
     if(qry->exec()) {
         model->setQuery(*qry);
+        model->setHeaderData(2,Qt::Horizontal,"Password");
         return model;
 
 
@@ -135,20 +136,62 @@ return 0;
     }
 }
 
-int DbManager::updateEntry(QString &website, QString &uname, QString &password, QString &comment, QString &key)
+int DbManager::importEntry(QString &website, QString &uname, QString &password, QString &comment, QString &key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
 
+    QSqlQuery *qry = new QSqlQuery(db);
+   qry->exec("pragma key='"+key+"';");
+   qry->exec("select count(*) from accounts where website='"+website+"';");
+   qry->next();
+   if(qry->value(0).toInt() == 0){
+
+
+    qry->prepare("insert into accounts (website,username,password,comment)"
+                " values('"+website+"','"+uname+"','"+password+"','"+comment+"');");
+
+
+    if(qry->exec())
+    {
+        QMessageBox::information(0,"Save","saved entry to passList.db");
+        db.commit();
+        return 1;
+
+    }
+    else {
+        QMessageBox::critical(0,"Save Failed","Duplicate data entered");
+        qDebug() << qry->lastError().text();
+        return 0;
+    }
+}
+    }
+else{
+QMessageBox::warning(0,"ERROR","passList.db not found.\nRegister First");
+return 0;
+    }
+}
+
+int DbManager::updateEntry(int id,QString &website, QString &uname, QString &password, QString &comment, QString &key)
+{
+    db.setDatabaseName("passList.db");
+    if(db.open()){
+        qDebug()<<key;
         QSqlQuery *qry = new QSqlQuery(db);
         qry->exec("pragma key='"+key+"';");
-        qry->prepare("update accounts set username='"+uname+"',password='"+password+"',comment='"+comment+"' where website=\""+website+"\";");
-
-        // update
+        qry->prepare("update accounts set website='"+website+"',username='"+uname+"',password='"+password+"',comment='"+comment+"' where website='"+website+"';");
+//        qry->addBindValue(website);
+//        qry->addBindValue(uname);
+//        qry->addBindValue(password);
+//        qry->addBindValue(comment);
+//        qry->addBindValue(id);
+//        // update
         if(qry->exec())
         {
             QMessageBox::information(0,"Update","Updated Entry");
-
+            db.commit();
+            db.close();
+            return 1;
 
         }
         else {
@@ -211,12 +254,13 @@ int DbManager::listImport(QString &website, QString &uname, QString &password, Q
     QFile dbFile("passList.db");
     if(dbFile.exists())
     {
-        makeAnEntry(website,uname,password,comment,key);
+
+        importEntry(website,uname,password,comment,key);
     }
 
 }
 
-int DbManager::getEntryDetail(QString &website, QString *uname, QString *password, QString *comment, QString &key)
+int DbManager::getEntryDetail(QString &website, QString *uname, QString *password, QString *comment,int *id, QString &key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -233,6 +277,7 @@ int DbManager::getEntryDetail(QString &website, QString *uname, QString *passwor
             *uname= qry->value(2).toString();
             *password=  qry->value(3).toString();
             *comment =  qry->value(4).toString();
+            *id = qry->value(0).toInt();
 
 
         }
@@ -256,6 +301,39 @@ int DbManager::getEntryDetail(QString &website, QString *uname, QString *passwor
         return 0;
     }
 
+}
+
+int DbManager::deleteEntry(QString &website, int &id, QString &key)
+{
+    db.setDatabaseName("passList.db");
+    if(db.open()){
+
+
+    QSqlQuery *qry = new QSqlQuery(db);
+    qry->exec("pragma key='"+key+"';");
+    qry->prepare("DELETE from accounts where website='"+website+"';");
+
+
+    if(qry->exec()) {
+
+    return 1;
+
+    } else {
+//        qDebug() << qry->lastError().text();
+        QMessageBox::critical(0,"No Records Found",qry->lastError().text()
+                              ,
+                              QMessageBox::Ok);
+        return 0;
+    }
+
+
+
+    }else{
+        QMessageBox::critical(0,"Missing passList.db",
+                              "Try registering first",
+                              QMessageBox::Ok);
+        return 0;
+    }
 }
 
 DbManager::~DbManager()
