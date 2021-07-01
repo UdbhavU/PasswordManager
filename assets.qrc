@@ -5,5 +5,8 @@
         <file>export.png</file>
         <file>user-shape.png</file>
         <file>exit.png</file>
+        <file>refresh.png</file>
+        <file>qt.png</file>
+        <file>about.png</file>
     </qresource>
 </RCC>

@@ -44,9 +44,18 @@
      <string>Operations</string>
     </property>
     <addaction name="actionMake_new_entry"/>
+    <addaction name="actionRefresh"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout_Password_Manager"/>
+    <addaction name="actionAbout_Qt"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOperations"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -62,6 +71,7 @@
    <addaction name="actionExport"/>
    <addaction name="actionImport"/>
    <addaction name="actionMake_new_entry"/>
+   <addaction name="actionRefresh"/>
    <addaction name="actionExit"/>
   </widget>
   <action name="actionExport">
@@ -98,6 +108,33 @@
    </property>
    <property name="text">
     <string>Make new entry</string>
+   </property>
+  </action>
+  <action name="actionRefresh">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/new/prefix1/refresh.png</normaloff>:/new/prefix1/refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+  </action>
+  <action name="actionAbout_Password_Manager">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/new/prefix1/about.png</normaloff>:/new/prefix1/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Password Manager</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/new/prefix1/qt.png</normaloff>:/new/prefix1/qt.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>

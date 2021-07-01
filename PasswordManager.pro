@@ -10,24 +10,30 @@ CONFIG += c++11
 
 SOURCES += \
     dbmanager.cpp \
+    editdialog.cpp \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
     makeentrydialog.cpp \
-    registerdialog.cpp
+    registerdialog.cpp \
+    viewentrydialog.cpp
 
 HEADERS += \
     dbmanager.h \
+    editdialog.h \
     logindialog.h \
     mainwindow.h \
     makeentrydialog.h \
-    registerdialog.h
+    registerdialog.h \
+    viewentrydialog.h
 
 FORMS += \
+    editdialog.ui \
     logindialog.ui \
     mainwindow.ui \
     makeentrydialog.ui \
-    registerdialog.ui
+    registerdialog.ui \
+    viewentrydialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

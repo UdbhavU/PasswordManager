@@ -4,10 +4,13 @@
 #include "registerdialog.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
+#include <QDebug>
 #include <QLabel>
 #include <QTableView>
 #include <QTextStream>
+#include <QMessageBox>
 #include "makeentrydialog.h"
+#include "viewentrydialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,9 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
         rd.setModal(true);
         rd.exec();
     }
-    else
-    {
-        //the below loop will persist the login window till the the correct password is entered; exit can be done only through the close button in the dialog
+           //the below loop will persist the login window till the the correct password is entered; exit can be done only through the close button in the dialog
         while(sessionId !=1){
 
             loginDialog ld(this,&key);
@@ -36,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
             ld.exec();
             sessionId = ld.getLoginStatus();
 
-        }
+
     }
     QLabel *status = new QLabel;
     if(sessionId == 1) status->setText("Logged");
@@ -123,10 +124,43 @@ void MainWindow::on_actionImport_triggered()
                pass = line.split(',').at(2);
                comment = line.split(',').at(3);
                db.listImport(website,username,pass,comment,key);
-               qDebug()<<website<<username<<pass<<comment;
+
 
            }
     }
 
+}
+
+
+void MainWindow::on_tblView_clicked(const QModelIndex &index)
+{
+    QString val = ui->tblView->model()->index(index.row(),0,QModelIndex()).data().toString();// get the website
+    QString uname,password,comment;
+    DbManager db;
+    db.getEntryDetail(val,&uname,&password,&comment,key);
+    qDebug()<<comment;
+    viewEntryDialog vd(this,val,uname,password,comment,key);
+    vd.setModal(true);
+    vd.exec();
+    qDebug()<<val;
+
+}
+
+
+void MainWindow::on_actionRefresh_triggered()
+{
+    fillTable();
+}
+
+
+void MainWindow::on_actionAbout_Qt_triggered()
+{
+    QMessageBox::aboutQt(this);
+}
+
+
+void MainWindow::on_actionAbout_Password_Manager_triggered()
+{
+    QMessageBox::about(this,"About Password Manager","Developed by\nUdbhav U\nThushar Kulal");
 }
 

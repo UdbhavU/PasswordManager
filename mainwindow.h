@@ -26,6 +26,14 @@ private slots:
 
     void on_actionImport_triggered();
 
+    void on_tblView_clicked(const QModelIndex &index);
+
+    void on_actionRefresh_triggered();
+
+    void on_actionAbout_Qt_triggered();
+
+    void on_actionAbout_Password_Manager_triggered();
+
 private:
     QString key;
     int sessionId = -1;

@@ -30,7 +30,8 @@ void makeEntryDialog::on_pushButton_clicked()
     QString uname = ui->uname->text();
     QString website = ui->website->text();
     QString comment = ui->comment->toPlainText();
-    QString password= ui->password->text();;
+    QString password= ui->password->text();
+
     if(password != ui->rePassword->text()){
         QMessageBox::critical(this,"Error","Password Mismatched");
         ui->password->clear();
