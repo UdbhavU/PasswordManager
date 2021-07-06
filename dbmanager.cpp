@@ -106,7 +106,11 @@ QSqlQueryModel* DbManager::getModel(const QString& key)
     return 0;
 }
 
-int DbManager::makeAnEntry(QString& website, QString& uname, QString& password,QString& comment,QString& key)
+int DbManager::makeAnEntry(QString& website,
+                           QString& uname,
+                           QString& password,
+                           QString& comment,
+                           QString& key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -136,7 +140,11 @@ return 0;
     }
 }
 
-int DbManager::importEntry(QString &website, QString &uname, QString &password, QString &comment, QString &key)
+int DbManager::importEntry(QString &website,
+                           QString &uname,
+                           QString &password,
+                           QString &comment,
+                           QString &key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -172,7 +180,12 @@ return 0;
     }
 }
 
-int DbManager::updateEntry(int id,QString &website, QString &uname, QString &password, QString &comment, QString &key)
+int DbManager::updateEntry(int id,
+                           QString &website,
+                           QString &uname,
+                           QString &password,
+                           QString &comment,
+                           QString &key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -206,7 +219,8 @@ return 0;
     }
 }
 
-int DbManager::listExport(QTextStream &stream,QString& key)
+int DbManager::listExport(QTextStream &stream,
+                          QString& key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -249,7 +263,11 @@ int DbManager::listExport(QTextStream &stream,QString& key)
 
 }
 
-int DbManager::listImport(QString &website, QString &uname, QString &password, QString &comment, QString &key)
+int DbManager::listImport(QString &website,
+                          QString &uname,
+                          QString &password,
+                          QString &comment,
+                          QString &key)
 {
     QFile dbFile("passList.db");
     if(dbFile.exists())
@@ -260,7 +278,12 @@ int DbManager::listImport(QString &website, QString &uname, QString &password, Q
 
 }
 
-int DbManager::getEntryDetail(QString &website, QString *uname, QString *password, QString *comment,int *id, QString &key)
+int DbManager::getEntryDetail(QString &website,
+                              QString *uname,
+                              QString *password,
+                              QString *comment,
+                              int *id,
+                              QString &key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -303,7 +326,9 @@ int DbManager::getEntryDetail(QString &website, QString *uname, QString *passwor
 
 }
 
-int DbManager::deleteEntry(QString &website, int &id, QString &key)
+int DbManager::deleteEntry(QString &website,
+                           int &id,
+                           QString &key)
 {
     db.setDatabaseName("passList.db");
     if(db.open()){
@@ -319,7 +344,7 @@ int DbManager::deleteEntry(QString &website, int &id, QString &key)
     return 1;
 
     } else {
-//        qDebug() << qry->lastError().text();
+
         QMessageBox::critical(0,"No Records Found",qry->lastError().text()
                               ,
                               QMessageBox::Ok);

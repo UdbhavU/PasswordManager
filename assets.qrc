@@ -9,4 +9,7 @@
         <file>qt.png</file>
         <file>about.png</file>
     </qresource>
+    <qresource prefix="/theme" lang="qss">
+        <file>theme.qss</file>
+    </qresource>
 </RCC>

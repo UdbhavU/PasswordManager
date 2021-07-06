@@ -2,7 +2,7 @@
 #include "logindialog.h"
 #include "registerdialog.h"
 #include "ui_logindialog.h"
-
+#include <QFile>
 #include <QCryptographicHash>
 #include <QMessageBox>
 
@@ -10,11 +10,12 @@ loginDialog::loginDialog(QWidget *parent,QString *pass) :
     QDialog(parent),
     ui(new Ui::loginDialog)
 {
-
+    QFile file("passList.db");
     key = pass;
-
-
     ui->setupUi(this);
+    if(file.exists()){
+        ui->register_2->hide();
+    }
     this->setWindowTitle("Login");
     ui->password->setEchoMode(QLineEdit::Password);
 }
